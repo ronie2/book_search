@@ -1,0 +1,7 @@
+log_data = []
+
+with open("log.log", "r+") as log:
+    for line in log:
+        log_data.append(line)
+
+print(log_data)

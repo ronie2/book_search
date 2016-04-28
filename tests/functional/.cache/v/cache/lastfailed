@@ -1,0 +1,6 @@
+{
+  "test_local_storage.py": true,
+  "test_log_file.py": true,
+  "test_server.py": true,
+  "test_smtp_server.py": true
+}

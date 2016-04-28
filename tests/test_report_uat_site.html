@@ -1,0 +1,480 @@
+<!DOCTYPE html><html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <style>body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	min-width: 1200px;
+	color: #999;
+}
+h2 {
+	font-size: 16px;
+	color: black;
+}
+
+p {
+    color: black;
+}
+
+a {
+	color: #999;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+
+#environment td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+}
+
+#environment tr:nth-child(odd) {
+	background-color: #f6f6f6;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed, .passed .col-result {
+	color: green;
+}
+span.skipped, span.xfailed, .skipped .col-result, .xfailed .col-result {
+	color: orange;
+}
+span.error, span.failed, span.xpassed, .error .col-result, .failed .col-result, .xpassed .col-result  {
+	color: red;
+}
+
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+
+#results-table {
+	border: 1px solid #e6e6e6;
+	color: #999;
+	font-size: 12px;
+	width: 100%
+}
+
+#results-table th, #results-table td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+	text-align: left
+}
+#results-table th {
+	font-weight: bold
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+
+.log:only-child {
+	height: inherit
+}
+.log {
+	background-color: #e6e6e6;
+	border: 1px solid #e6e6e6;
+	color: black;
+	display: block;
+	font-family: "Courier New", Courier, monospace;
+	height: 230px;
+	overflow-y: scroll;
+	padding: 5px;
+	white-space: pre-wrap
+}
+div.image {
+	border: 1px solid #e6e6e6;
+	float: right;
+	height: 240px;
+	margin-left: 5px;
+	overflow: hidden;
+	width: 320px
+}
+div.image img {
+	width: 320px
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+	cursor: pointer;
+}
+
+.sort-icon {
+	font-size: 0px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 5px;
+	/*triangle*/
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+}
+
+.inactive .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #E6E6E6;
+}
+
+.asc.active .sort-icon {
+	/*finish triangle*/
+	border-bottom: 8px solid #999;
+}
+
+.desc.active .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #999;
+}
+</style></head>
+  <body>
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+addEventListener("DOMContentLoaded", function() {
+    reset_sort_headers();
+
+    split_extra_onto_two_rows();
+    sort_column(find('.initial-sort'));
+
+    find_all('.col-links a.image').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  var node = elem;
+                                  while (node && !node.classList.contains('results-table-row')) {
+                                      node = node.parentNode;
+                                  }
+                                  if (node != null) {
+                                      if (node.nextSibling &&
+                                          node.nextSibling.classList.contains("extra")) {
+                                          var href = find('.image img', node.nextSibling).src;
+                                          window.open(href);
+                                      }
+                                  }
+                                  event.preventDefault();
+                              }, false)
+    });
+
+    find_all('.image a').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  window.open(find('img', elem).getAttribute('src'));
+                                  event.preventDefault();
+                              }, false)
+    });
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+});
+
+function sort_table(clicked, key_func) {
+    one_row_for_data();
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+
+    var sorted_rows = sort(rows, key_func, reversed);
+
+    var parent = document.getElementById('results-table-body');
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+
+    split_extra_onto_two_rows();
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+    var multiplier = reversed ? -1 : 1;
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+        return multiplier * (key_a >= key_b ? 1 : -1);
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'XFailed', 'XPassed', 'Skipped',
+                       'Passed'];
+        return strings.indexOf(elem.childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function split_extra_onto_two_rows() {
+    find_all('tr.results-table-row').forEach(function(elem) {
+        var new_row = document.createElement("tr")
+        new_row.className = "extra";
+        elem.parentNode.insertBefore(new_row, elem.nextSibling);
+        find_all(".extra", elem).forEach(function (td_elem) {
+            if (find("*:not(.empty)", td_elem)) {
+                new_row.appendChild(td_elem);
+                td_elem.colSpan=5;
+            } else {
+                td_elem.parentNode.removeChild(td_elem);
+            }
+        });
+    });
+}
+
+function one_row_for_data() {
+    find_all('tr.results-table-row').forEach(function(elem) {
+        if (elem.nextSibling.classList.contains('extra')) {
+            toArray(elem.nextSibling.childNodes).forEach(
+                function (td_elem) {
+                    elem.appendChild(td_elem);
+                })
+        } else {
+            var new_td = document.createElement("td");
+            new_td.className = "extra";
+            elem.appendChild(new_td);
+        }
+    });
+}
+</script>
+    <p>Report generated on 28-Apr-2016 at 09:11:33</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>Platform</td>
+        <td>Linux-3.19.0-51-generic-x86_64-with-debian-jessie-sid</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.5.1</td></tr></table>
+    <h2>Summary</h2>
+    <p>17 tests ran in 30.94 seconds.<br/><span class="passed">16 passed</span>, <span class="skipped">0 skipped</span>, <span class="failed">1 failed</span>, <span class="error">0 errors</span>.<br/><span class="skipped">0 expected failures</span>, <span class="failed">0 unexpected passes</span>.</p>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable initial-sort result" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr></thead>
+      <tbody id="results-table-body">
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_local_storage.py::test_0001_db_is_readable</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_local_storage.py::test_0002_db_is_anna_karenina</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_log_file.py::test_0001_log_is_readable</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0001_server_200_OK[response0]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0001_server_200_OK[response1]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0002_server_header[response0]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0002_server_header[response1]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0003_server_body_valid_[response0]</td>
+          <td class="col-duration">0.55</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_server.py::test_0003_server_body_valid_[response1]</td>
+          <td class="col-duration">0.56</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_smtp_server.py::test_0001_smtp_reachable</td>
+          <td class="col-duration">0.19</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">functional/test_smtp_server.py::test_0002_smtp_login</td>
+          <td class="col-duration">0.39</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0001_uat_site_title[browser0]</td>
+          <td class="col-duration">0.34</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0001_uat_site_title[browser1]</td>
+          <td class="col-duration">0.26</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0002_uat_site_page_name[browser0]</td>
+          <td class="col-duration">0.37</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="failed results-table-row">
+          <td class="col-result">Failed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0002_uat_site_page_name[browser1]</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="log">browser = {&#x27;driver&#x27;: &lt;selenium.webdriver.firefox.webdriver.WebDriver (session=&quot;27712d6a-2812-44e2-a1e7-2b2a806007bd&quot;)&gt;, &#x27;param&#x27;: {&#x27;page_name_ER&#x27;: &#x27;Roman&#x27;, &#x27;title_ER&#x27;: &#x27;Thank you! Search started!&#x27;, &#x27;url&#x27;: &#x27;http://127.0.0.1:5000/result&#x27;}}<br/><br/>    def test_0002_uat_site_page_name(browser):<br/>&gt;       assert browser[&quot;param&quot;][&quot;page_name_ER&quot;] == \<br/>               browser[&quot;driver&quot;].find_element_by_id(&quot;page-name&quot;).text<br/><br/>uat/test_uat_site.py:29: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webdriver.py:234: in find_element_by_id<br/>    return self.find_element(by=By.ID, value=id_)<br/>../../../anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webdriver.py:712: in find_element<br/>    {&#x27;using&#x27;: by, &#x27;value&#x27;: value})[&#x27;value&#x27;]<br/>../../../anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webdriver.py:201: in execute<br/>    self.error_handler.check_response(response)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x7f7eb2c7ccf8&gt;<br/>response = {&#x27;name&#x27;: &#x27;findElement&#x27;, &#x27;sessionId&#x27;: &#x27;27712d6a-2812-44e2-a1e7-2b2a806007bd&#x27;, &#x27;status&#x27;: 7, &#x27;value&#x27;: {&#x27;message&#x27;: &#x27;Unable...ecode.com/components/command-processor.js&#x27;, &#x27;lineNumber&#x27;: 12481, &#x27;methodName&#x27;: &#x27;DelayedCommand.prototype.execute/&lt;&#x27;}]}}<br/><br/>    def check_response(self, response):<br/>        &quot;&quot;&quot;<br/>            Checks that a JSON response from the WebDriver does not have an error.<br/>    <br/>            :Args:<br/>             - response - The JSON response from the WebDriver server as a dictionary<br/>               object.<br/>    <br/>            :Raises: If the response contains an error message.<br/>            &quot;&quot;&quot;<br/>        status = response.get(&#x27;status&#x27;, None)<br/>        if status is None or status == ErrorCode.SUCCESS:<br/>            return<br/>    <br/>        value = None<br/>        message = response.get(&quot;message&quot;, &quot;&quot;)<br/>        screen = response.get(&quot;screen&quot;, &quot;&quot;)<br/>        stacktrace = None<br/>        if isinstance(status, int):<br/>            value_json = response.get(&#x27;value&#x27;, None)<br/>            if value_json and isinstance(value_json, basestring):<br/>                import json<br/>                value = json.loads(value_json)<br/>                status = value[&#x27;error&#x27;]<br/>                message = value[&#x27;message&#x27;]<br/>    <br/>        exception_class = ErrorInResponseException<br/>        if status in ErrorCode.NO_SUCH_ELEMENT:<br/>            exception_class = NoSuchElementException<br/>        elif status in ErrorCode.NO_SUCH_FRAME:<br/>            exception_class = NoSuchFrameException<br/>        elif status in ErrorCode.NO_SUCH_WINDOW:<br/>            exception_class = NoSuchWindowException<br/>        elif status in ErrorCode.STALE_ELEMENT_REFERENCE:<br/>            exception_class = StaleElementReferenceException<br/>        elif status in ErrorCode.ELEMENT_NOT_VISIBLE:<br/>            exception_class = ElementNotVisibleException<br/>        elif status in ErrorCode.INVALID_ELEMENT_STATE:<br/>            exception_class = InvalidElementStateException<br/>        elif status in ErrorCode.INVALID_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR \<br/>                or status in ErrorCode.INVALID_XPATH_SELECTOR_RETURN_TYPER:<br/>            exception_class = InvalidSelectorException<br/>        elif status in ErrorCode.ELEMENT_IS_NOT_SELECTABLE:<br/>            exception_class = ElementNotSelectableException<br/>        elif status in ErrorCode.INVALID_COOKIE_DOMAIN:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNABLE_TO_SET_COOKIE:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.SCRIPT_TIMEOUT:<br/>            exception_class = TimeoutException<br/>        elif status in ErrorCode.UNKNOWN_ERROR:<br/>            exception_class = WebDriverException<br/>        elif status in ErrorCode.UNEXPECTED_ALERT_OPEN:<br/>            exception_class = UnexpectedAlertPresentException<br/>        elif status in ErrorCode.NO_ALERT_OPEN:<br/>            exception_class = NoAlertPresentException<br/>        elif status in ErrorCode.IME_NOT_AVAILABLE:<br/>            exception_class = ImeNotAvailableException<br/>        elif status in ErrorCode.IME_ENGINE_ACTIVATION_FAILED:<br/>            exception_class = ImeActivationFailedException<br/>        elif status in ErrorCode.MOVE_TARGET_OUT_OF_BOUNDS:<br/>            exception_class = MoveTargetOutOfBoundsException<br/>        else:<br/>            exception_class = WebDriverException<br/>        value = response[&#x27;value&#x27;]<br/>        if isinstance(value, basestring):<br/>            if exception_class == ErrorInResponseException:<br/>                raise exception_class(response, value)<br/>            raise exception_class(value)<br/>        message = &#x27;&#x27;<br/>        if &#x27;message&#x27; in value:<br/>            message = value[&#x27;message&#x27;]<br/>    <br/>        screen = None<br/>        if &#x27;screen&#x27; in value:<br/>            screen = value[&#x27;screen&#x27;]<br/>    <br/>        stacktrace = None<br/>        if &#x27;stackTrace&#x27; in value and value[&#x27;stackTrace&#x27;]:<br/>            stacktrace = []<br/>            try:<br/>                for frame in value[&#x27;stackTrace&#x27;]:<br/>                    line = self._value_or_default(frame, &#x27;lineNumber&#x27;, &#x27;&#x27;)<br/>                    file = self._value_or_default(frame, &#x27;fileName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if line:<br/>                        file = &quot;%s:%s&quot; % (file, line)<br/>                    meth = self._value_or_default(frame, &#x27;methodName&#x27;, &#x27;&lt;anonymous&gt;&#x27;)<br/>                    if &#x27;className&#x27; in frame:<br/>                        meth = &quot;%s.%s&quot; % (frame[&#x27;className&#x27;], meth)<br/>                    msg = &quot;    at %s (%s)&quot;<br/>                    msg = msg % (meth, file)<br/>                    stacktrace.append(msg)<br/>            except TypeError:<br/>                pass<br/>        if exception_class == ErrorInResponseException:<br/>            raise exception_class(response, message)<br/>        elif exception_class == UnexpectedAlertPresentException and &#x27;alert&#x27; in value:<br/>            raise exception_class(message, screen, stacktrace, value[&#x27;alert&#x27;].get(&#x27;text&#x27;))<br/>&gt;       raise exception_class(message, screen, stacktrace)<br/><span class="error">E       selenium.common.exceptions.NoSuchElementException: Message: Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;page-name&quot;}</span><br/><span class="error">E       Stacktrace:</span><br/><span class="error">E           at FirefoxDriver.prototype.findElementInternal_ (file:///tmp/tmpkdqr6dnf/extensions/fxdriver@googlecode.com/components/driver-component.js:10659)</span><br/><span class="error">E           at FirefoxDriver.prototype.findElement (file:///tmp/tmpkdqr6dnf/extensions/fxdriver@googlecode.com/components/driver-component.js:10668)</span><br/><span class="error">E           at DelayedCommand.prototype.executeInternal_/h (file:///tmp/tmpkdqr6dnf/extensions/fxdriver@googlecode.com/components/command-processor.js:12534)</span><br/><span class="error">E           at DelayedCommand.prototype.executeInternal_ (file:///tmp/tmpkdqr6dnf/extensions/fxdriver@googlecode.com/components/command-processor.js:12539)</span><br/><span class="error">E           at DelayedCommand.prototype.execute/&lt; (file:///tmp/tmpkdqr6dnf/extensions/fxdriver@googlecode.com/components/command-processor.js:12481)</span><br/><br/>../../../anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/errorhandler.py:181: NoSuchElementException<br/></div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0003_uat_site_form_search_phrase[browser0]</td>
+          <td class="col-duration">0.36</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr>
+        <tr class="passed results-table-row">
+          <td class="col-result">Passed</td>
+          <td class="col-name">uat/test_uat_site.py::test_0003_uat_site_form_search_phrase[browser1]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td>
+          <td class="extra">
+            <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
