@@ -21,7 +21,8 @@ In line #: 232 -> "Matvey, my sister Anna Arkadyevna will be here tomorrow," he 
 
 
 ## 0. Observer docs:
-[Basic app diagram](https://github.com/ronie2/book_search/blob/master/testing_docs/scheme.pdf) 
+[Basic app diagram](https://github.com/ronie2/book_search/blob/master/testing_docs/scheme.pdf)
+ 
 [Risk analyze plan](https://github.com/ronie2/book_search/blob/master/testing_docs/risks.pdf)
 
 ## A. Configure SERVER and DB:
