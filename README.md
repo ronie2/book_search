@@ -1,10 +1,36 @@
+# This is book_search app!
+1. You can seach Leo Tolstoys "Anna Karenina" book (english edition) and get search results to your e-mail in following format:
+```
+Hi dear customer!
+You have submitted search request for term:
+Anna
+
+Here are your results:
+In line #: 2 -> ﻿      The Project Gutenberg EBook of Anna Karenina, by Leo Tolstoy
+In line #: 12 -> Title: Anna Karenina
+In line #: 37 ->                              Anna Karenina
+In line #: 232 -> "Matvey, my sister Anna Arkadyevna will be here tomorrow," he said,
+...
+...
+...
+```
+2. App writes ```log.log``` file with time spend for search
+3. App implements SOME Functional and User Acceptance tests
+4. App uses e-mail message queue
+5. App uses gmail.com SMTP server
+
+
+## 0. Observer docs:
+[Basic app diagram](https://github.com/ronie2/book_search/blob/master/testing_docs/scheme.pdf) 
+[Risk analyze plan](https://github.com/ronie2/book_search/blob/master/testing_docs/risks.pdf)
+
 ## A. Configure SERVER and DB:
 
 1. Install Redis 
 2. Install Python 3.5
 3. Clone git repo: ```$ git clone https://github.com/ronie2/book_search.git```
 4. Change dir: ```$ cd book_search/```
-5. Install requirements: ```$ pip install -r requirements.txt``` or $ ```pip3 install -r requirements.txt``` (depending on your env)
+5. Install requirements: ```$ pip install -r requirements.txt``` or ```$ pip3 install -r requirements.txt``` (depending on your env)
 6. Configure server (Specify IP ADDRESS, PORT and FULL PATH TO "anna_karenina.txt"):
 ```
 $ vim server/config/conf.py
@@ -46,7 +72,7 @@ conf_uat = [
 ]
 ```
 
-## C. Configure Functional test (specify IP ADRESS (```"url"```) and full PATH TO DB (```"path"```)):
+## C. Configure Functional test (specify IP ADRESS (```"url"```) and full PATH TO ANNA KARENINA DB (```"path"```)):
 ```
 $ vim book_search/tests/functional/conf.py
 ```
@@ -79,3 +105,7 @@ conf_smtp = {
 ## E. Start tests (Firefox web browser SHOULD be installed to perform UAT test):
 1. Change working directory: ```$ cd /book_search/tests```
 2. Run pytest: ```$ py.test```
+
+## F. Observe test reports and try service:
+1. Test reports are located in ```tests``` folder
+2. Service is available on specified server url (```http://172.17.0.4:5000/``` in this example)
