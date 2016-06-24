@@ -42,7 +42,7 @@ cfg = {
     }
 }
 
-db_path = "/home/kali/PycharmProjects/book_search/server/db/anna_karenina.txt"
+db_path = "/book_search/server/db/anna_karenina.txt"
 
 message = """
 Hi dear customer!
