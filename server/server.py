@@ -19,8 +19,8 @@ for listener in cfg["server"].values():
                              method["endpoint"],
                              eval(method["handle"]))
 
-app.router.add_static("/js/", "templates/js")
-app.router.add_static("/css/", "templates/css")
+app.router.add_static("/js/", "/book_search/server/templates/js")
+app.router.add_static("/css/", "/book_search/server/templates/css")
 
 web.run_app(app, host=cfg["service"]["home"]["host"],
-            port=cfg["service"]["home"]["port"][1:5])
+            port=int(cfg["service"]["home"]["port"][1:5]))
