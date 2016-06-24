@@ -9,7 +9,7 @@ from config.conf import cfg
 main_loop = asyncio.get_event_loop()
 
 app = web.Application(loop=main_loop)
-aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader('templates'))
+aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader('/book_search/server/templates'))
 
 
 for listener in cfg["server"].values():
