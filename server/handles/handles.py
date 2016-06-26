@@ -29,7 +29,7 @@ async def result_handle(request):
 
             enqueue_email(result, job["email"], job["searchinput"])
             return {
-                "message": "Search started for this request: " + str(job["searchinput"]) + "<br>" + \
+                "message": "Search started for this request: " + str(job["searchinput"]) + "<br>" +
                            "Results will be sent to this e-mail: " + str(job["email"]),
                 "status_code": 1,
                 "title": cfg["server"]["result"]["config"]["jinja2"]["title"]

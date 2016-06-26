@@ -2,7 +2,7 @@ cfg = {
     "service": {
         "home": {
             "host": "172.17.0.2",
-            "port": ":5000",
+            "port": 5000,
         },
         "email": {
             "smtp_host": "smtp.gmail.com",
@@ -41,8 +41,10 @@ cfg = {
         },
     }
 }
+import os
+server_dir = os.path.abspath(__file__ + "/../../")
 
-db_path = "/book_search/server/db/anna_karenina.txt"
+db_path = server_dir + "/db/anna_karenina.txt"
 
 message = """
 Hi dear customer!
