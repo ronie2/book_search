@@ -4,7 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 def send_email(results, receiver, request):
-    msg = MIMEText(message.format(request=request, result=results))
+    msg = MIMEText(message.format(request=request, result=str(results)))
     msg["Subject"] = "Book Search Service Results"
     msg["From"] = cfg["service"]["email"]["login"]
     msg["To"] = receiver

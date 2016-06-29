@@ -1,7 +1,7 @@
-from aiohttp import web
 import aiohttp_jinja2
-from config.conf import cfg, db_path
+from config.conf import cfg
 from sender import send_email
+from mongo_search import mongo_search
 
 @aiohttp_jinja2.template('search.jinja2')
 async def search_handle(request):
@@ -24,10 +24,12 @@ async def result_handle(request):
                 "title": cfg["server"]["result"]["config"]["jinja2"]["title"]
             }
         elif validate_email(job["email"], check_mx=True):
-
-            result = find_phrase(job["searchinput"], db_path)
-
+            write_log(status="BEGIN")
+            result = "\n".join(list(find_phrase(job["searchinput"])))
+            if len(result) == 0:
+                result = "Phrase was not found!"
             enqueue_email(result, job["email"], job["searchinput"])
+            write_log(status="END")
             return {
                 "message": "Search started for this request: " + str(job["searchinput"]) + "<br>" +
                            "Results will be sent to this e-mail: " + str(job["email"]),
@@ -41,31 +43,22 @@ async def result_handle(request):
                 "title": cfg["server"]["result"]["config"]["jinja2"]["title"]
             }
 
-def find_phrase(phrase, txt_file):
-    write_log(status="BEGIN")
-    phrase = str(phrase)
-    if phrase[0] != " ":
-        phrase = " " + phrase
-
-    if phrase[-1] != " ":
-        phrase = phrase + " "
-
-    result = []
-
-    try:
-        with open(txt_file, "r+") as f:
-            i = 1
-            for line in f:
-                i = i + 1
-                if phrase in line:
-                    result.append(("In line #: " + str(i) + " -> " + str(line.rstrip())))
-    except Exception as e:
-        return e
-    if len(result) == 0:
-        return "Phrase was not found!"
-    write_log(status="END")
-    return "\n".join(result)
-
+def find_phrase(search_term):
+    for result in mongo_search(search_term):
+        sub_mail = """
+        In book: {book_name}
+        In part: {part_name}
+        In chapter: {chapter_name}
+        In paragraph #: {paragraph_num}
+        Text:
+        {paragraph_text}
+        """.format(book_name=result["result"]["book"],
+                   part_name=result["result"]["part"],
+                   chapter_name=result["result"]["chapter"],
+                   paragraph_num=result["result"]["paragraph"],
+                   paragraph_text=result["result"]["text"]
+                   )
+        yield sub_mail
 
 def write_log(status, log_file_name="log.log"):
     import os

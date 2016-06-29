@@ -1,7 +1,7 @@
 cfg = {
     "service": {
         "home": {
-            "host": "172.17.0.2",
+            "host": None, # Host will be assigned automatically
             "port": 5000,
         },
         "email": {
@@ -53,4 +53,11 @@ You have submitted search request for term:
 
 Here are your results:
 {result}
+"""
+sub_message = """In book: {book_name}
+        In part: {part_name}
+        In chapter: {chapter_name}
+        In paragraph #: {paragraph_num}
+        Text:
+        {paragraph_text}
 """
