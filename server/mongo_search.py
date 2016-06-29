@@ -31,5 +31,5 @@ def mongo_search(search_term, db_name="hallo"):
             for item in collection.find({"$text": {"$search": search_term}}))
 
 if __name__ == "__main__":
-    res = find_phrase("Anna")
+    res = list(find_phrase("War"))
     pass

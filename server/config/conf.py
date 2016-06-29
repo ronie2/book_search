@@ -2,7 +2,7 @@ cfg = {
     "service": {
         "home": {
             "host": None, # Host will be assigned automatically
-            "port": 5000,
+            "port": 5001,
         },
         "email": {
             "smtp_host": "smtp.gmail.com",
@@ -54,10 +54,11 @@ You have submitted search request for term:
 Here are your results:
 {result}
 """
-sub_message = """In book: {book_name}
+sub_message = """
+        In book: {book_name}
         In part: {part_name}
         In chapter: {chapter_name}
         In paragraph #: {paragraph_num}
         Text:
         {paragraph_text}
-"""
+        """
