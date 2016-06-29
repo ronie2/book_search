@@ -6,7 +6,7 @@ def mongo_search(search_term, db_name="hallo"):
     collection = db["paragraphs"]
 
     def get_search_results(paragraph):
-
+        import logging
         chapter = db["chapters"].find_one({"_id": paragraph["root"]})
         count = chapter["paragraphs"].index(paragraph["_id"]) + 1
 

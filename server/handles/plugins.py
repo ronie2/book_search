@@ -6,7 +6,7 @@ async def get_log(log_file_name="log.log"):
             pass
 
     log_records = ""
-    with open(log_file_name, "r+") as log:
+    with open(log_file_name, "r") as log:
         return log_records.join(log)
 
 async def write_log(request, log_file_name="log.log"):
@@ -53,7 +53,7 @@ async def sleep(endpoint, method_name):
 
     return
 
-async def middleware_log():
+async def get_ssh_log():
     import os
     from paramiko import SSHClient
     from scp import SCPClient
@@ -61,8 +61,8 @@ async def middleware_log():
     ssh = SSHClient()
     ssh.load_system_host_keys()
     local_path = os.getcwd()
-    main_log = "/hosting/cp/fnma-test.t1.ssstest.com/logs/logMain.log"
-    ssh.connect("tc-cp2.t1.tenet", 22, "roman.neiviezhyn", "yhnujm")
+    main_log = "path/to/log"
+    ssh.connect("URI", 22, "login_here", "password_here")
     scp = SCPClient(ssh.get_transport())
     scp.get(main_log, local_path = local_path)
     log_records = ""

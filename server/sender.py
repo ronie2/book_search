@@ -2,7 +2,7 @@ from config.conf import cfg
 from config.conf import message
 import smtplib
 from email.mime.text import MIMEText
-
+import logging
 
 def send_email(results, receiver, request):
     msg = MIMEText(message.format(request=request, result=str(results)))

@@ -4,10 +4,17 @@ import aiohttp_jinja2
 import asyncio
 import socket
 import os
+import logging
 
 from handles.handles import *
-from config.conf import cfg
+from config.conf import cfg, logger_msg
 
+# Creating and initializing basic logger
+logging.basicConfig(format='%(asctime)s %(message)s',
+                    datefmt='%m/%d/%Y %H:%M:%S',
+                    filename='app.log',
+                    filemode='w',
+                    level=logging.INFO)
 
 # Override 'config/conf.py' setting for listening IP -> current IP is selected
 cfg["service"]["home"]["host"] = socket.gethostbyname(socket.gethostname())
@@ -34,6 +41,12 @@ for listener in cfg["server"].values():
 app.router.add_static("/js/", server_dir + "/templates/js")
 app.router.add_static("/css/", server_dir + "/templates/css")
 
+# App start logging
+logging.info(logger_msg["app_start"])
+
 # Server start
 web.run_app(app, host=cfg["service"]["home"]["host"],
             port=cfg["service"]["home"]["port"])
+
+# App stop logging
+logging.info(logger_msg["app_stop"])

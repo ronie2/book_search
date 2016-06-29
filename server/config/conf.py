@@ -1,7 +1,7 @@
 cfg = {
     "service": {
         "home": {
-            "host": None, # Host will be assigned automatically
+            "host": None,  # Host will be assigned automatically
             "port": 5001,
         },
         "email": {
@@ -39,12 +39,27 @@ cfg = {
                 }
             },
         },
+        "app_log": {
+            "config": {
+                "method": "*",
+                "endpoint": "/log/app",
+                "handle": "log_app",
+                "timeout": 0,
+                "log_file": "app.log",
+            }
+        }
     }
 }
-import os
-server_dir = os.path.abspath(__file__ + "/../../")
 
-db_path = server_dir + "/db/anna_karenina.txt"
+logger_msg = {
+    "app_start": "Book Search server START...",
+    "app_stop": "Book Search server STOP...",
+    "invalid_request": "[{uid}] Got invalid search request",
+    "invalid_email": "[{uid}] Got invalid search request - e-mail ({e_mail}) is not valid",
+    "valid_request": "[{uid}] Got valid search request to find: '{term}' and send results to e-mail: {e_mail}",
+    "search_started": "[{uid}] Search results preparation started at: {time}",
+    "search_finished": "[{uid}] Full search results preparation finished at: {time} and took: {delta}",
+}
 
 message = """
 Hi dear customer!
