@@ -44,6 +44,12 @@ app.router.add_static("/css/", server_dir + "/templates/css")
 # App start logging
 logging.info(logger_msg["app_start"])
 
+# Info message about IP and port to console
+print("*" * 20 + " Server is running: " +
+      str(cfg["service"]["home"]["host"]) +":" +
+      str(cfg["service"]["home"]["port"]) + "*" * 20)
+
+
 # Server start
 web.run_app(app, host=cfg["service"]["home"]["host"],
             port=cfg["service"]["home"]["port"])
