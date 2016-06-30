@@ -1,4 +1,5 @@
-def mongo_search(search_term, db_name="hallo"):
+from config.conf import mongo_cfg
+def mongo_search(search_term, db_name=mongo_cfg["db_name"]):
     """This def inserts book tree into mongodb and return mongo '_id' root"""
     from pymongo import MongoClient
     client = MongoClient()
@@ -6,7 +7,6 @@ def mongo_search(search_term, db_name="hallo"):
     collection = db["paragraphs"]
 
     def get_search_results(paragraph):
-        import logging
         chapter = db["chapters"].find_one({"_id": paragraph["root"]})
         count = chapter["paragraphs"].index(paragraph["_id"]) + 1
 
