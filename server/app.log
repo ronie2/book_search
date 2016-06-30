@@ -1,12 +1,10 @@
-06/30/2016 08:49:43 Book Search server START...
-06/30/2016 08:49:48 127.0.0.1 - - [30/Jun/2016:12:49:48 +0000] "GET /book_parser HTTP/1.1" 200 1597 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 08:49:54 [b88c29b0-47d4-469c-a144-de80da2c7d69] Received job to process file: 'PETER PAN.txt' and title: 'Roman!'
-06/30/2016 08:49:54 [b88c29b0-47d4-469c-a144-de80da2c7d69] Job passed validator
-06/30/2016 08:49:54 [b88c29b0-47d4-469c-a144-de80da2c7d69] Folder created: /home/kali/book_search/server/db/b88c29b0-47d4-469c-a144-de80da2c7d69
-06/30/2016 08:49:54 [b88c29b0-47d4-469c-a144-de80da2c7d69] File 'PETER PAN.txt' saved to folder '/home/kali/book_search/server/db/b88c29b0-47d4-469c-a144-de80da2c7d69'
-06/30/2016 08:49:54 [b88c29b0-47d4-469c-a144-de80da2c7d69] Started parsing *.txt file and submitting to mongodb
-06/30/2016 08:49:55 [b88c29b0-47d4-469c-a144-de80da2c7d69] Finished parsing. Record created in 'roots' collections: 57751572b179a942fd3bf9e2
-06/30/2016 08:49:55 127.0.0.1 - - [30/Jun/2016:12:49:55 +0000] "POST /book_parser HTTP/1.1" 200 284238 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 08:50:00 127.0.0.1 - - [30/Jun/2016:12:50:00 +0000] "GET /log/app HTTP/1.1" 200 1246 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 09:02:07 127.0.0.1 - - [30/Jun/2016:13:02:07 +0000] "GET /log/app HTTP/1.1" 200 1454 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 09:04:04 Book Search server STOP...
+06/30/2016 11:44:03 Book Search server START...
+06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Got valid search request to find: 'Anna' and send results to e-mail: roman.nzn@gmail.com
+06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Search results preparation started at: 2016-06-30 11:44:10.413222 with limit of: '0^df411' seconds
+06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Error in parsing time: could not convert string to float: '0^df411'
+06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Parsing without limit
+06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Full search results preparation finished at: 2016-06-30 11:44:10.916446 and took: 0:00:00.503231
+06/30/2016 11:44:10 127.0.0.1 - - [30/Jun/2016:15:44:10 +0000] "GET /result?searchinput=Anna&time=0%5Edf411&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 530 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+06/30/2016 11:44:14 127.0.0.1 - - [30/Jun/2016:15:44:14 +0000] "GET /log/app HTTP/1.1" 200 999 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+06/30/2016 11:44:43 127.0.0.1 - - [30/Jun/2016:15:44:43 +0000] "GET /log/app HTTP/1.1" 200 1206 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+06/30/2016 11:51:25 Book Search server STOP...

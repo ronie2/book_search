@@ -12,9 +12,11 @@ from uuid import uuid4
 import os.path
 import logging
 
+
 async def parse_validator():
     # Not implemented yet
     return True
+
 
 # 'Parser page'
 @aiohttp_jinja2.template("parser.jinja2")
@@ -56,7 +58,8 @@ async def book_parser_handle(request):
             mongo_job = mongo_parser(parse_book(file_name, title=job["title"]))
             logging.info(logger_msg["parser_mongo_finish"].format(uid=job["uid"], root_id=mongo_job))
 
-            return web.Response(body=job["content"])
+            result_string = "File: '{filename}' parsed successfully  to 'roots' collection mongodb with id: {root_id}"
+            return web.Response(body=result_string.format(filename=job["filename"], root_id=mongo_job).encode())
 
     # If request metod GET => render jinja form
     if request.method == "GET":
@@ -106,11 +109,27 @@ async def result_handle(request):
 
             started_at = datetime.now()
             logging.info(logger_msg["search_started"].format(uid=job["uid"],
-                                                             time=datetime.now()))
+                                                             time=datetime.now(),
+                                                             time_limit=job["request"]["time"]))
 
             # Get list of search results 'sub-emails'
-            result = "\n".join(list(find_phrase(job["request"]["searchinput"])))
+            try:
+                result_list = []
+                for item in find_phrase(job["request"]["searchinput"]):
+                    if (item["time"] - started_at).total_seconds() > float(job["request"]["time"]):
+                        break
+                    else:
+                        result_list.append(item["message"])
+                result = "\n".join(result_list)
 
+            # If can't parse max search time as float => search without time limit
+            except Exception as e:
+                logging.info(logger_msg["invalid_max_time"].format(uid=job["uid"], e=e))
+                logging.info(logger_msg["no_time_limit"].format(uid=job["uid"]))
+                result_list = [item["message"] for item in find_phrase(job["request"]["searchinput"])]
+                result = "\n".join(result_list)
+
+            # Logging job execution time
             finished_at = datetime.now()
             logging.info(logger_msg["search_finished"].format(uid=job["uid"],
                                                               time=finished_at,
@@ -151,14 +170,17 @@ async def log_app(request):
 
 def find_phrase(search_term):
     for result in mongo_search(search_term):
-        sub_mail = sub_message.format(
-            book_name=result["result"]["book"],
-            part_name=result["result"]["part"],
-            chapter_name=result["result"]["chapter"],
-            paragraph_num=result["result"]["paragraph"],
-            paragraph_text=result["result"]["text"]
-        )
-        yield sub_mail
+        serch_result = {
+            "message": sub_message.format(
+                book_name=result["result"]["book"],
+                part_name=result["result"]["part"],
+                chapter_name=result["result"]["chapter"],
+                paragraph_num=result["result"]["paragraph"],
+                paragraph_text=result["result"]["text"]),
+            "time": datetime.now()
+        }
+        yield serch_result
+
 
 def enqueue_email(results, receiver, request):
     from rq import Queue

@@ -1,4 +1,4 @@
-def book_parser(db_folder="/home/kali/book_search/server/db/"):
+def book_parser():
     """This def parses book content tree
     It creates tree for books with following markup:
 
@@ -11,6 +11,11 @@ def book_parser(db_folder="/home/kali/book_search/server/db/"):
     """
     from os import listdir
     from os.path import join
+    import os.path
+
+    # Full path to 'server' directory
+    server_dir = os.path.abspath(__file__ + "/../")
+    db_folder = server_dir + "/db/basic_data/"
 
     return (parse_book(join(db_folder + file)) for file in listdir(db_folder))
 
@@ -18,7 +23,6 @@ def book_parser(db_folder="/home/kali/book_search/server/db/"):
 def parse_book(filename, title=None):
     from copy import deepcopy
     from collections import deque
-
 
     # Define elements prototypes
     paragraph_prototype = {"text": []}
@@ -107,7 +111,3 @@ def parse_book(filename, title=None):
         book_tree["parts"].append(part)
 
     return book_tree
-
-if __name__ == "__main__":
-    book_list = list(book_parser())
-    pass

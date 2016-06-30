@@ -1,6 +1,8 @@
 from book_tree_parser import book_parser
+from config.conf import mongo_cfg
 
-def mongo_parser(book_tree, db_name="hallo"):
+
+def mongo_parser(book_tree, db_name=mongo_cfg["db_name"]):
     """This def inserts book tree into mongodb and return mongo '_id' root"""
     from pymongo import MongoClient
     import pymongo
@@ -22,20 +24,20 @@ def mongo_parser(book_tree, db_name="hallo"):
         # Add current 'part' to 'parts' collection
         collection = db["parts"]
         part_cur = collection.insert_one({"name": part["name"],
-                               "root": book_root.inserted_id,
-                               "chapters": []})
+                                          "root": book_root.inserted_id,
+                                          "chapters": []})
 
         # Update 'roots' record with inserted 'part' '_id'
         collection = db["roots"]
         collection.find_one_and_update({'_id': book_root.inserted_id},
-                                   {"$push": {"parts": part_cur.inserted_id}})
+                                       {"$push": {"parts": part_cur.inserted_id}})
 
         # Add all 'chapters' to 'chapters' collection
         for chapter in part["chapters"]:
             collection = db["chapters"]
             chapter_cur = collection.insert_one({"name": chapter["name"],
-                                   "paragraphs": [],
-                                   "root": part_cur.inserted_id})
+                                                 "paragraphs": [],
+                                                 "root": part_cur.inserted_id})
 
             # Add all 'paragraphs' to 'chapters' collection
             for paragraph in chapter["paragraphs"]:
@@ -52,10 +54,10 @@ def mongo_parser(book_tree, db_name="hallo"):
         # Update 'part' record with inserted 'chapters' '_id's
         collection = db["parts"]
         collection.find_one_and_update({'_id': part_cur.inserted_id},
-                                   {"$push": {"chapters": chapter_cur.inserted_id}})
+                                       {"$push": {"chapters": chapter_cur.inserted_id}})
 
     return book_root.inserted_id
 
+
 if __name__ == "__main__":
-    mo = [mongo_parser(book) for book in book_parser()]
-    pass
+    print([mongo_parser(book) for book in book_parser()])

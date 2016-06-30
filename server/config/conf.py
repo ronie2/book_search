@@ -1,3 +1,8 @@
+mongo_cfg = {
+    "db_name": "book_search",
+    "db_host": None,
+    "db_port": None
+}
 cfg = {
     "service": {
         "home": {
@@ -9,7 +14,6 @@ cfg = {
             "smtp_port": 465,
             "login": "book.search.app.test@gmail.com",
             "password": "book.search.app.test111",
-
         }
     },
     "server": {
@@ -69,8 +73,10 @@ logger_msg = {
     "app_stop": "Book Search server STOP...",
     "invalid_request": "[{uid}] Got invalid search request",
     "invalid_email": "[{uid}] Got invalid search request - e-mail ({e_mail}) is not valid",
+    "invalid_max_time": "[{uid}] Error in parsing time: {e}",
+    "no_time_limit": "[{uid}] Searching without time limit",
     "valid_request": "[{uid}] Got valid search request to find: '{term}' and send results to e-mail: {e_mail}",
-    "search_started": "[{uid}] Search results preparation started at: {time}",
+    "search_started": "[{uid}] Search results preparation started at: {time} with limit of: '{time_limit}' seconds",
     "search_finished": "[{uid}] Full search results preparation finished at: {time} and took: {delta}",
     "parser_got_job": "[{uid}] Received job to process file: '{filename}' and title: '{title}'",
     "parser_validator_pass": "[{uid}] Job passed validator",

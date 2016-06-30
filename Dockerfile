@@ -14,8 +14,5 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 RUN git clone https://github.com/ronie2/book_search.git
 RUN pip3 install -r /book_search/requirements.txt
-# CMD python3 /book_search/server/server.py
-CMD redis-server & mongod & cd /book_search/server && /usr/local/bin/rq worker & python3 /book_search/server/server.py
-~                                                                                                                                      
-~                                                                                                                                      
-~                                                                                     
+
+CMD redis-server & mongod & cd /book_search/server && python3 /book_search/server/mongo_parser.py && /usr/local/bin/rq worker & python3 /book_search/server/server.py
