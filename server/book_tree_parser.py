@@ -15,7 +15,7 @@ def book_parser(db_folder="/home/kali/book_search/server/db/"):
     return (parse_book(join(db_folder + file)) for file in listdir(db_folder))
 
 
-def parse_book(filename):
+def parse_book(filename, title=None):
     from copy import deepcopy
     from collections import deque
 
@@ -27,7 +27,7 @@ def parse_book(filename):
     book_prototype = {"name": None, "parts": []}
 
     # Create initial clean copies
-    book_dict = deepcopy(book_prototype)
+    book_tree = deepcopy(book_prototype)
     part = deepcopy(part_prototype)
     chapter = deepcopy(chapter_prototype)
     paragraph = deepcopy(paragraph_prototype)
@@ -37,8 +37,13 @@ def parse_book(filename):
     pt_started = False
     par_started = False
 
-    # Book title equals to '*.txt' file name
-    book_dict["name"] = filename.split("/")[-1].split(".")[:-1][0]
+    # If title is provided => use this title
+    if title:
+        book_tree["name"] = title
+
+    # If no title => title equals to '*.txt' file name
+    else:
+        book_tree["name"] = filename.split("/")[-1].split(".")[:-1][0]
 
     # Load book to deque of lines
     with open(filename, "r", encoding="utf-8") as f:
@@ -54,7 +59,7 @@ def parse_book(filename):
         if "PART" in line:
             # If this is not first occurrence
             if pt_started:
-                book_dict["parts"].append(part)
+                book_tree["parts"].append(part)
                 part = deepcopy(part_prototype)
                 words_list = line.split()
                 part["name"] = " ".join(words_list[1:len(words_list)])
@@ -98,10 +103,10 @@ def parse_book(filename):
         # Add current 'chapter' dict to part["chapters"] dict
         part["chapters"].append(chapter)
 
-        # Add current part dict to 'book_dict["parts"]'
-        book_dict["parts"].append(part)
+        # Add current part dict to 'book_tree["parts"]'
+        book_tree["parts"].append(part)
 
-    return book_dict
+    return book_tree
 
 if __name__ == "__main__":
     book_list = list(book_parser())

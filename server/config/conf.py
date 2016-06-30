@@ -72,6 +72,12 @@ logger_msg = {
     "valid_request": "[{uid}] Got valid search request to find: '{term}' and send results to e-mail: {e_mail}",
     "search_started": "[{uid}] Search results preparation started at: {time}",
     "search_finished": "[{uid}] Full search results preparation finished at: {time} and took: {delta}",
+    "parser_got_job": "[{uid}] Received job to process file: '{filename}' and title: '{title}'",
+    "parser_validator_pass": "[{uid}] Job passed validator",
+    "parser_save_file": "[{uid}] File '{filename}' saved to folder '{foldername}'",
+    "parser_folder_created": "[{uid}] Folder created: {foldername}",
+    "parser_mongo_start": "[{uid}] Started parsing *.txt file and submitting to mongodb",
+    "parser_mongo_finish": "[{uid}] Finished parsing. Record created in 'roots' collections: {root_id}",
 }
 
 message = """

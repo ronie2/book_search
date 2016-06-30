@@ -4,10 +4,17 @@ from aiohttp import web
 from config.conf import cfg, sub_message, logger_msg
 from sender import send_email
 from mongo_search import mongo_search
+from mongo_parser import mongo_parser
 from datetime import datetime
 from handles.plugins import get_log
+from book_tree_parser import parse_book
 from uuid import uuid4
+import os.path
+import logging
 
+async def parse_validator():
+    # Not implemented yet
+    return True
 
 # 'Parser page'
 @aiohttp_jinja2.template("parser.jinja2")
@@ -18,14 +25,38 @@ async def book_parser_handle(request):
             "title": data["title"],
             "file": data["book"].file,
             "filename": data["book"].filename,
+            "content": data["book"].file.read(),
             "uid": uuid4(),
         }
 
-        content = job["file"].read()
+        logging.info(logger_msg["parser_got_job"].format(uid=job["uid"],
+                                                         filename=job["filename"],
+                                                         title=job["title"]))
+        # content = job["file"].read()
 
-        with open(job["filename"], "wb") as f:
-            f.write(content)
-        return web.Response(body=content)
+        if await parse_validator():
+            logging.info(logger_msg["parser_validator_pass"].format(uid=job["uid"]))
+
+            # Create directory for new job
+            server_dir = os.path.abspath(__file__ + "/../../")
+            db_dir = server_dir + "/db/" + str(job["uid"])
+            os.makedirs(db_dir)
+            logging.info(logger_msg["parser_folder_created"].format(uid=job["uid"], foldername=db_dir))
+            file_name = db_dir + "/" + job["filename"]
+
+            # Save new job file to folder
+            with open(file_name, "wb") as f:
+                f.write(job["content"])
+
+            logging.info(logger_msg["parser_save_file"].format(uid=job["uid"],
+                                                               filename=job["filename"],
+                                                               foldername=db_dir))
+
+            logging.info(logger_msg["parser_mongo_start"].format(uid=job["uid"]))
+            mongo_job = mongo_parser(parse_book(file_name, title=job["title"]))
+            logging.info(logger_msg["parser_mongo_finish"].format(uid=job["uid"], root_id=mongo_job))
+
+            return web.Response(body=job["content"])
 
     # If request metod GET => render jinja form
     if request.method == "GET":
@@ -33,7 +64,6 @@ async def book_parser_handle(request):
             "title": cfg["server"]["book_parser"]["config"]["jinja2"]["title"],
             "legend": cfg["server"]["book_parser"]["config"]["jinja2"]["legend"]
         }
-
 
 
 # 'Search page' jinja2 template preparation
@@ -129,7 +159,6 @@ def find_phrase(search_term):
             paragraph_text=result["result"]["text"]
         )
         yield sub_mail
-
 
 def enqueue_email(results, receiver, request):
     from rq import Queue

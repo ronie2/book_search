@@ -14,7 +14,8 @@ def mongo_parser(book_tree, db_name="hallo"):
 
     # Insert 'basic protos' to 'roots' collection
     collection = db["roots"]
-    book_root = collection.insert_one({"name": book_tree["name"],"parts": []})
+    book_root = collection.insert_one({"name": book_tree["name"],
+                                       "parts": []})
 
     # For every 'part' in book tree
     for part in book_tree["parts"]:
@@ -40,7 +41,7 @@ def mongo_parser(book_tree, db_name="hallo"):
             for paragraph in chapter["paragraphs"]:
                 collection = db["paragraphs"]
                 paragraph_cur = collection.insert_one({"text": paragraph,
-                                         "root": chapter_cur.inserted_id})
+                                                       "root": chapter_cur.inserted_id})
 
                 # Update 'chapter' record with inserted 'paragraphs' '_id's
                 collection = db["chapters"]
