@@ -39,6 +39,19 @@ cfg = {
                 }
             },
         },
+        "book_parser": {
+            "config": {
+                "method": "*",
+                "endpoint": "/book_parser",
+                "handle": "book_parser_handle",
+                "timeout": 0,
+                "log_file": "book_parser.log",
+                "jinja2": {
+                    "title": "Welcome to Book Parser!",
+                    "legend": "Book Search Parsing Service"
+                }
+            },
+        },
         "app_log": {
             "config": {
                 "method": "*",

@@ -9,6 +9,33 @@ from handles.plugins import get_log
 from uuid import uuid4
 
 
+# 'Parser page'
+@aiohttp_jinja2.template("parser.jinja2")
+async def book_parser_handle(request):
+    if request.method == "POST":
+        data = await request.post()
+        job = {
+            "title": data["title"],
+            "file": data["book"].file,
+            "filename": data["book"].filename,
+            "uid": uuid4(),
+        }
+
+        content = job["file"].read()
+
+        with open(job["filename"], "wb") as f:
+            f.write(content)
+        return web.Response(body=content)
+
+    # If request metod GET => render jinja form
+    if request.method == "GET":
+        return {
+            "title": cfg["server"]["book_parser"]["config"]["jinja2"]["title"],
+            "legend": cfg["server"]["book_parser"]["config"]["jinja2"]["legend"]
+        }
+
+
+
 # 'Search page' jinja2 template preparation
 @aiohttp_jinja2.template('search.jinja2')
 async def search_handle(request):

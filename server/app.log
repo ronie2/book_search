@@ -1,8 +1,12 @@
-06/29/2016 12:14:45 Book Search server START...
-06/29/2016 12:14:47 127.0.0.1 - - [29/Jun/2016:16:14:47 +0000] "GET /log/app HTTP/1.1" 200 48 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/29/2016 12:15:00 [7269d4ef-f15c-4ad6-8338-1433d494f4fc] Got valid search request to find: 'roman' and send results to e-mail: roman.nzn@gmail.com
-06/29/2016 12:15:00 [7269d4ef-f15c-4ad6-8338-1433d494f4fc] Search results preparation started at: 2016-06-29 12:15:00.677459
-06/29/2016 12:15:00 [7269d4ef-f15c-4ad6-8338-1433d494f4fc] Full search results preparation finished at: 2016-06-29 12:15:00.701983 and took: 0:00:00.024531
-06/29/2016 12:15:00 127.0.0.1 - - [29/Jun/2016:16:15:00 +0000] "GET /result?searchinput=roman&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 531 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/29/2016 12:15:11 127.0.0.1 - - [29/Jun/2016:16:15:11 +0000] "GET /log/app HTTP/1.1" 200 951 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/29/2016 12:16:01 Book Search server STOP...
+06/30/2016 10:15:12 Book Search server START...
+06/30/2016 10:15:16 127.0.0.1 - - [30/Jun/2016:07:15:16 +0000] "GET /log/app HTTP/1.1" 200 48 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:20 127.0.0.1 - - [30/Jun/2016:07:15:20 +0000] "GET /book_parser?textinput=Deeedee&book=Anna+Karenina.txt&submit_button+class%3D= HTTP/1.1" 200 1597 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:20 127.0.0.1 - - [30/Jun/2016:07:15:20 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:20 127.0.0.1 - - [30/Jun/2016:07:15:20 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:24 127.0.0.1 - - [30/Jun/2016:07:15:24 +0000] "GET /book_parser?textinput=Deeedee&book=Anna+Karenina.txt&submit_button+class%3D= HTTP/1.1" 200 1597 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:25 127.0.0.1 - - [30/Jun/2016:07:15:25 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:25 127.0.0.1 - - [30/Jun/2016:07:15:25 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:33 127.0.0.1 - - [30/Jun/2016:07:15:33 +0000] "GET /book_parser HTTP/1.1" 200 1597 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:41 127.0.0.1 - - [30/Jun/2016:07:15:41 +0000] "POST /book_parser HTTP/1.1" 200 2041122 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:15:56 127.0.0.1 - - [30/Jun/2016:07:15:56 +0000] "GET /log/app HTTP/1.1" 200 1847 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
+06/30/2016 10:16:45 Book Search server STOP...
