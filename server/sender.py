@@ -4,6 +4,16 @@ from email.mime.text import MIMEText
 import smtplib
 
 def send_email(results, receiver, request):
+    """send_email function sends e-mail with search result to customer
+
+    Args:
+        results (str): formatted search results as one string
+        receiver (str): e-mail of customer
+        request (str): search term customer searches
+
+    Returns:
+        server_ssl.send_message(msg)
+    """
     msg = MIMEText(message.format(request=request, result=str(results)))
 
     msg["Subject"] = "Book Search Service Results"

@@ -14,6 +14,13 @@ import logging
 
 
 async def parse_validator():
+    """parse_validator validates files to be parsed
+
+    NOT IMPLEMENTED JET
+
+    Returns:
+        True
+    """
     # Not implemented yet
     return True
 
@@ -21,6 +28,18 @@ async def parse_validator():
 # 'Parser page'
 @aiohttp_jinja2.template("parser.jinja2")
 async def book_parser_handle(request):
+    """book_parser_handle function processes new books parsing
+
+    Args:
+        request (aiohttp request): http request
+
+    Returns:
+        If 'POST' method:
+            String with result of parsing
+
+        If 'GET' method:
+            Config dict for jinja2 template
+    """
     if request.method == "POST":
         data = await request.post()
         job = {
@@ -72,6 +91,14 @@ async def book_parser_handle(request):
 # 'Search page' jinja2 template preparation
 @aiohttp_jinja2.template('search.jinja2')
 async def search_handle(request):
+    """search_handle function processes search form
+
+    Args:
+        request (aiohttp request): http request
+
+    Returns:
+        Config dict for jinja2 template
+    """
     if request.method == "GET":
         return {
             "title": cfg["server"]["search"]["config"]["jinja2"]["title"],
@@ -82,6 +109,14 @@ async def search_handle(request):
 # 'Results page' jinja2 template preparation
 @aiohttp_jinja2.template('result.jinja2')
 async def result_handle(request):
+    """result_handle function processes search
+
+    Args:
+        request (aiohttp request): http request
+
+    Returns:
+        Config dict for jinja2 template with processing results
+    """
     from validate_email import validate_email
     if request.method == "GET":
 
@@ -164,11 +199,27 @@ async def result_handle(request):
 
 
 async def log_app(request):
+    """log_app function processes log web interface
+
+    Args:
+        request (aiohttp request): http request
+
+    Returns:
+        Text web response with log string
+    """
     if request.method == "GET":
         return web.Response(text=await get_log(log_file_name=cfg["server"]["app_log"]["config"]["log_file"]))
 
 
 def find_phrase(search_term):
+    """find_phrase generator yield search result strings
+
+    Args:
+        search_term (str): search term customer searches
+
+    Yields:
+        'serch_result' strings
+    """
     for result in mongo_search(search_term):
         serch_result = {
             "message": sub_message.format(
@@ -183,6 +234,16 @@ def find_phrase(search_term):
 
 
 def enqueue_email(results, receiver, request):
+    """enqueue_email functions enqueues job to send e-mail to RQ WORKER
+
+    Args:
+        results (str): formatted search results as one string
+        receiver (str): e-mail of customer
+        request (str): search term customer searches
+
+    Returns:
+        None
+    """
     from rq import Queue
     from redis import Redis
 

@@ -1,12 +1,41 @@
 from config.conf import mongo_cfg
+
 def mongo_search(search_term, db_name=mongo_cfg["db_name"]):
-    """This def inserts book tree into mongodb and return mongo '_id' root"""
+    """mongo_search function searches over 'paragraph' collection and returns
+    generator object of search result dicts
+
+    Args:
+        search_term (str): term to find in database
+        db_name (str): name of mongodb database to use
+
+    Returns:
+        generator object of dicts like:
+        {
+            'result': get_search_results(paragraph),
+             'search_term': search_term
+         }
+    """
     from pymongo import MongoClient
     client = MongoClient()
     db = client[db_name]
     collection = db["paragraphs"]
 
     def get_search_results(paragraph):
+        """get_search_results coroutine creates search results dicts
+
+        Args:
+            paragraph (mongodb_cursor): cursor over search results
+
+        Returns:
+            Search result dict in this format:
+            {
+                "book": book["name"],
+                "part": part["name"],
+                "chapter": chapter["name"],
+                "paragraph": count,
+                "text": paragraph["text"]
+            }
+        """
         chapter = db["chapters"].find_one({"_id": paragraph["root"]})
         count = chapter["paragraphs"].index(paragraph["_id"]) + 1
 

@@ -1,4 +1,12 @@
 async def get_log(log_file_name="log.log"):
+    """get_log function returns data in log file as string
+
+    Args:
+        log_file_name (str): path to log file
+
+    Returns:
+        Log file data as single string
+    """
     import os
     # Check if file exists and create file if it doesn't
     if not os.path.isfile(log_file_name):

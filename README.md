@@ -1,5 +1,15 @@
 # This is book_search app!
-1. You can seach books via web page ```http://[IP]:[PORT]/``` and get search results to your e-mail in following format:
+
+App address: http://[IP]:[PORT]/
+App endpoints:
+| Endpoin       | Role          |
+| ------------- |:-------------:|
+| '/'           | Main search page |
+| '/result'     | Page with search results|
+| '/book_parser'| New books parsing page      |
+| '/log/app'    | Main application log |
+
+1. You can search books via web page ```http://[IP]:[PORT]/``` and get search results to your e-mail in following format:
 ```
 Hi dear customer!
 You have submitted search request for term:
@@ -12,15 +22,30 @@ Here are your results:
         In chapter: 25
         In paragraph #: 1
         Text:
-        Vronsky and Anna spent the whole summer and part of the winter in the country, living in just the same condition, and still taking no steps to obtain a divorce. It was an understood thing between them that they should not go away anywhere; but both felt, the longer they lived alone, especially in the autumn, without guests in the house, that they could not stand this existence, and that they would have to alter it.
+        Vronsky and Anna spent the whole summer and part of the winter in the country, living in just the
+        same condition, and still taking no steps to obtain a divorce. It was an understood thing between
+        them that they should not go away anywhere; but both felt, the longer they lived alone, especially
+        in the autumn, without guests in the house, that they could not stand this existence, and that they
+        would have to alter it.
 
+        ...
 
         In book: Dracula
         In part: ONE
         In chapter: XIX
         In paragraph #: 21
         Text:
-        With their going it seemed as if some evil presence had departed, for the dogs frisked about and barked merrily as they made sudden darts at their prostrate foes, and turned them over and over and tossed them in the air with vicious shakes. We all seemed to find our spirits rise. Whether it was the purifying of the deadly atmosphere by the opening of the chapel door, or the relief which we experienced by finding ourselves in the open I know not; but most certainly the shadow of dread seemed to slip from us like a robe, and the occasion of our coming lost something of its grim significance, though we did not slacken a whit in our resolution. We closed the outer door and barred and locked it, and bringing the dogs with us, began our search of the house. We found nothing throughout except dust in extraordinary proportions, and all untouched save for my own footsteps when I had made my first visit. Never once did the dogs exhibit any symptom of uneasiness, and even when we returned to the chapel they frisked about as though they had been rabbit-hunting in a summer wood
+        With their going it seemed as if some evil presence had departed, for the dogs frisked about and barked
+        merrily as they made sudden darts at their prostrate foes, and turned them over and over and tossed them
+        in the air with vicious shakes. We all seemed to find our spirits rise. Whether it was the purifying of the
+        deadly atmosphere by the opening of the chapel door, or the relief which we experienced by finding ourselves
+        in the open I know not; but most certainly the shadow of dread seemed to slip from us like a robe, and the
+        occasion of our coming lost something of its grim significance, though we did not slacken a whit in our
+        resolution. We closed the outer door and barred and locked it, and bringing the dogs with us, began our
+        search of the house. We found nothing throughout except dust in extraordinary proportions, and all untouched
+        save for my own footsteps when I had made my first visit. Never once did the dogs exhibit any symptom of
+        uneasiness, and even when we returned to the chapel they frisked about as though they had been rabbit-hunting
+        in a summer wood
 ...
 ...
 ...
@@ -28,7 +53,20 @@ Here are your results:
 2. App uses mongodb for storing and searching texts. [Text index](https://docs.mongodb.com/manual/core/index-text/) is used.
 3. You can set maximum search time limit in this format ```1.500001```. App will search for about 1.5 sec than stop search and send result to e-mail.
 4. App is deployed with some books located in following folder: ```book_search/server/db/basic_data```
-5. User can add aditional books using web interface: ```http://[IP]:[PORT]/book_parser```
+5. User can add additional books using web interface: ```http://[IP]:[PORT]/book_parser```. Requirements to files are following:
+```
+encoding: utf-8
+book protocol:
+
+[some_text]
+'PART' NAME_1
+'CHAPTER' or 'Chapter' NAME_1
+[some_text]
+...
+'PART' NAME_N
+'CHAPTER' or 'Chapter' NAME_N
+[some_text]
+```
 6. App writes ```book_search/server/app.log``` file with time spend for search and other info. Web interface: ```http://[IP]:[PORT]/app/log```
 7. App implements SOME Functional and User Acceptance tests
 8. App uses e-mail message queue
@@ -38,6 +76,8 @@ Here are your results:
 [Basic app diagram](https://github.com/ronie2/book_search/blob/master/testing_docs/scheme.pdf)
  
 [Risk analyze plan](https://github.com/ronie2/book_search/blob/master/testing_docs/risks.pdf)
+
+[Database diagram](https://github.com/ronie2/book_search/blob/master/testing_docs/book_search_mongodb.pdf)
 
 ## Install
 ### Using docker
@@ -76,9 +116,11 @@ cfg = {
 
 #### D. Start server:
 1. Change working directory: ```$ cd book_search/server```
-2. Prepopulate server MongoDB with default datf ```python3 book_search/server/mongo_parser.py```
+2. Pre populate server MongoDB with default data ```python3 book_search/server/mongo_parser.py```
 3. Start RQ and Server: ```$ rq worker & python server.py```
 
+# Tests are not adapted to MongoDB version jet!
+---
 #### B. Configure UAT test:
 1. Edit /book_search/tests/uat/conf_user.py (specify ```"url"```):
 ```

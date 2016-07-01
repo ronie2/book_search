@@ -1,12 +1,11 @@
 def book_parser():
-    """This def parses book content tree
-    It creates tree for books with following markup:
+    """book_parser function returning generator object of parse_book() function
 
-    Title:
-    Tree:
-        - 'PART' NAME
-        -- 'Chapter' NAME
-        --- Text
+    Args:
+        None
+
+    Returns:
+        generator object of parse_book() function.
 
     """
     from os import listdir
@@ -21,6 +20,30 @@ def book_parser():
 
 
 def parse_book(filename, title=None):
+    """parse_book function returning book_tree dict with book content
+
+    Args:
+        filename (str): full path to file say '/book_search/server/db/book_name.txt'
+        title (str): title of a book say "Anna Karenina". If not provided 'title' = filename 'book_name'
+
+    Returns:
+        dict 'book_tree' object in this format:
+
+            book_tree = {
+            "name": book_name,
+            "parts": [{
+                        "name": part_name,
+                        "chapters": [{
+                            "name": None,
+                            "paragraphs": [{
+                                "text": []
+                                }]
+                        }]
+            }]
+        }
+
+    """
+
     from copy import deepcopy
     from collections import deque
 

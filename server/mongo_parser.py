@@ -3,7 +3,16 @@ from config.conf import mongo_cfg
 
 
 def mongo_parser(book_tree, db_name=mongo_cfg["db_name"]):
-    """This def inserts book tree into mongodb and return mongo '_id' root"""
+    """mongo_parser function puts data to mongodb and returns book root '_id's
+
+    Args:
+        book_tree (dict): book data dict as returned by book_tree_parser.parse_book()
+        db_name (str): name of mongodb database to use
+
+    Returns:
+        inserted_id - mongodb '_id' of root in 'roots' collection
+    """
+
     from pymongo import MongoClient
     import pymongo
 
