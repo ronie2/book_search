@@ -1,13 +1,12 @@
 # This is book_search app!
 
 App address: http://[IP]:[PORT]/
+
 App endpoints:
-| Endpoin       | Role          |
-| ------------- |:-------------:|
-| '/'           | Main search page |
-| '/result'     | Page with search results|
-| '/book_parser'| New books parsing page      |
-| '/log/app'    | Main application log |
+'/' - Main search page
+'/result' - Page with search results
+'/book_parser' - New books parsing page
+'/log/app' - Main application log
 
 1. You can search books via web page ```http://[IP]:[PORT]/``` and get search results to your e-mail in following format:
 ```
