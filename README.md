@@ -84,7 +84,7 @@ book protocol:
 
 ## Install
 ### Using docker
-0. The easiest way to install using docker is to download [setup script](https://github.com/ronie2/book_search/blob/master/setup.sh) and run it ```source setup.sh```
+0. The easiest way to install using docker is to download [setup script](https://raw.githubusercontent.com/ronie2/book_search/master/setup.sh) and run it ```source setup.sh```
 or use these commands:
 1. Clone git repo: ```$ git clone https://github.com/ronie2/book_search.git```
 2. Build docker container: ```$ sudo docker build -t ronie2/book_search book_search/```
