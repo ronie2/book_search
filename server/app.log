@@ -1,10 +1,20 @@
-06/30/2016 11:44:03 Book Search server START...
-06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Got valid search request to find: 'Anna' and send results to e-mail: roman.nzn@gmail.com
-06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Search results preparation started at: 2016-06-30 11:44:10.413222 with limit of: '0^df411' seconds
-06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Error in parsing time: could not convert string to float: '0^df411'
-06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Parsing without limit
-06/30/2016 11:44:10 [09d64d8b-ddf3-4c6d-9707-1ed4d020e7a7] Full search results preparation finished at: 2016-06-30 11:44:10.916446 and took: 0:00:00.503231
-06/30/2016 11:44:10 127.0.0.1 - - [30/Jun/2016:15:44:10 +0000] "GET /result?searchinput=Anna&time=0%5Edf411&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 530 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 11:44:14 127.0.0.1 - - [30/Jun/2016:15:44:14 +0000] "GET /log/app HTTP/1.1" 200 999 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 11:44:43 127.0.0.1 - - [30/Jun/2016:15:44:43 +0000] "GET /log/app HTTP/1.1" 200 1206 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-06/30/2016 11:51:25 Book Search server STOP...
+07/01/2016 07:44:08 Book Search server START...
+07/01/2016 07:44:16 127.0.0.1 - - [01/Jul/2016:04:44:16 +0000] "GET / HTTP/1.1" 200 2234 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:44:16 127.0.0.1 - - [01/Jul/2016:04:44:16 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 200 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:44:16 127.0.0.1 - - [01/Jul/2016:04:44:16 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 200 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:44:16 127.0.0.1 - - [01/Jul/2016:04:44:16 +0000] "GET /favicon.ico HTTP/1.1" 404 14 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:44:16 127.0.0.1 - - [01/Jul/2016:04:44:16 +0000] "GET /favicon.ico HTTP/1.1" 404 14 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:44:40 [77fb0533-8b80-4d72-910e-04715bf5f653] Got valid search request to find: 'Roman' and send results to e-mail: roman.nzn@gmail.com
+07/01/2016 07:44:40 [77fb0533-8b80-4d72-910e-04715bf5f653] Search results preparation started at: 2016-07-01 07:44:40.278746 with limit of: '10' seconds
+07/01/2016 07:44:40 [77fb0533-8b80-4d72-910e-04715bf5f653] Full search results preparation finished at: 2016-07-01 07:44:40.431244 and took: 0:00:00.152509
+07/01/2016 07:44:40 127.0.0.1 - - [01/Jul/2016:04:44:40 +0000] "GET /result?searchinput=Roman&time=10&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 531 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:46:00 [1e8b7599-d8d7-4e9b-9843-86afff11a0b3] Got valid search request to find: 'Roman' and send results to e-mail: roman.nzn@gmail.com
+07/01/2016 07:46:00 [1e8b7599-d8d7-4e9b-9843-86afff11a0b3] Search results preparation started at: 2016-07-01 07:46:00.002977 with limit of: '10' seconds
+07/01/2016 07:46:00 [1e8b7599-d8d7-4e9b-9843-86afff11a0b3] Full search results preparation finished at: 2016-07-01 07:46:00.021667 and took: 0:00:00.018701
+07/01/2016 07:46:00 127.0.0.1 - - [01/Jul/2016:04:46:00 +0000] "GET /result?searchinput=Roman&time=10&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 531 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:46:00 127.0.0.1 - - [01/Jul/2016:04:46:00 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:46:00 127.0.0.1 - - [01/Jul/2016:04:46:00 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
+07/01/2016 07:46:44 [edc69c98-7659-41bc-ba01-1c4c75c430fb] Got valid search request to find: 'SumMer' and send results to e-mail: roman.nzn@gmail.com
+07/01/2016 07:46:44 [edc69c98-7659-41bc-ba01-1c4c75c430fb] Search results preparation started at: 2016-07-01 07:46:44.418537 with limit of: '10' seconds
+07/01/2016 07:46:44 [edc69c98-7659-41bc-ba01-1c4c75c430fb] Full search results preparation finished at: 2016-07-01 07:46:44.478528 and took: 0:00:00.060001
+07/01/2016 07:46:44 127.0.0.1 - - [01/Jul/2016:04:46:44 +0000] "GET /result?searchinput=SumMer&time=10&email=roman.nzn%40gmail.com&submit_button= HTTP/1.1" 200 532 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0"
